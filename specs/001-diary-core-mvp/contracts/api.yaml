@@ -1,0 +1,55 @@
+openapi: 3.0.0
+info:
+  title: Diary Maker API
+  version: 1.0.0
+  description: Internal API for AI generation and data operations.
+
+paths:
+  /api/generate:
+    post:
+      summary: Generate a diary entry from a brief thought
+      description: Uses Google Gemini to expand a brief thought into a full diary entry based on the selected persona.
+      security:
+        - SupabaseAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - brief_thought
+              properties:
+                brief_thought:
+                  type: string
+                  maxLength: 300
+                  description: The user's initial thought.
+                persona:
+                  type: string
+                  enum: [Gratitude, Reflective, Optimistic, Neutral]
+                  default: Neutral
+                  description: The desired tone of the entry.
+      responses:
+        '200':
+          description: Successful generation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: string
+                    description: The AI-generated diary entry.
+        '400':
+          description: Invalid input (e.g., brief_thought too long)
+        '401':
+          description: Unauthorized (User not logged in)
+        '500':
+          description: AI Service Error
+
+components:
+  securitySchemes:
+    SupabaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

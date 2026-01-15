@@ -5,6 +5,15 @@
 **Status**: Draft
 **Input**: User description: "아까 작성한 constitution.md 를 참고해서 작성해줘."
 
+## Clarifications
+
+### Session 2026-01-15
+- Q: Which specific set of "personas" or tones should be available in the MVP? → A: Standard Set (Gratitude, Reflective, Optimistic, Neutral).
+- Q: Should users be able to delete their diary entries in the MVP? → A: Yes, include a simple delete button in the list view.
+- Q: Can users edit entries after they have been saved? → A: Yes, post-save editing is allowed.
+- Q: What authentication method should the MVP prioritize? → A: Social Only (Google Sign-in).
+- Q: What is the character limit for the "brief thought" input? → A: 300 characters.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Secure Access (Priority: P1)
@@ -18,7 +27,7 @@ Users must authenticate to access the application, ensuring their personal diary
 **Acceptance Scenarios**:
 
 1. **Given** a visitor on the landing page, **When** they click "Start Journaling", **Then** they are presented with a login/signup screen.
-2. **Given** a new user, **When** they sign up with valid credentials, **Then** a user account is created and they are redirected to the dashboard.
+2. **Given** a new user, **When** they sign up with their Google account, **Then** a user account is created and they are redirected to the dashboard.
 3. **Given** an unauthenticated user, **When** they attempt to access a protected route (e.g., `/dashboard`), **Then** they are redirected to the login page.
 
 ---
@@ -54,6 +63,7 @@ Users can save their generated entries and view them later, building a digital j
 2. **Given** an authenticated user with saved entries, **When** they view the dashboard, **Then** they see a chronological list of their past entries.
 3. **Given** a user viewing the list, **When** they click an entry, **Then** the full details of that entry are displayed.
 4. **Given** user A and user B, **When** user A views their dashboard, **Then** they do NOT see user B's entries (Row Level Security).
+5. **Given** an authenticated user on the dashboard, **When** they click the delete button on an entry and confirm, **Then** the entry is removed from the list and database.
 
 ### Edge Cases
 
@@ -65,16 +75,17 @@ Users can save their generated entries and view them later, building a digital j
 
 ### Functional Requirements
 
-- **FR-001**: System MUST support user authentication to identify and verify users.
+- **FR-001**: System MUST support user authentication via Google Sign-in to identify and verify users.
 - **FR-002**: System MUST enforce data privacy so users can strictly access only their own data.
-- **FR-003**: System MUST accept a text input (brief thought) from the user.
+- **FR-003**: System MUST accept a text input (brief thought) from the user, with a maximum limit of 300 characters.
 - **FR-004**: System MUST integrate with a Generative AI service to expand the brief thought into a full diary entry.
-- **FR-005**: System MUST allow users to select a "persona" or tone (e.g., Gratitude, Reflective) to influence generation (defaulting to a neutral/supportive tone).
+- **FR-005**: System MUST allow users to select a "persona" or tone from a predefined set (Gratitude, Reflective, Optimistic, or Neutral) to influence generation (defaulting to Neutral).
 - **FR-006**: System MUST display the generated content using a handwriting-style visual presentation.
-- **FR-007**: Users MUST be able to edit the generated content before saving.
+- **FR-007**: Users MUST be able to edit the generated content before saving AND after saving (re-edit).
 - **FR-008**: System MUST persist the final entry (original thought, generated text, timestamp, user identification) to persistent storage.
 - **FR-009**: System MUST provide a dashboard listing past entries, sorted by date (newest first).
 - **FR-010**: System MUST use a paper-like texture for the background of the entry view/creation components to ensure emotional fidelity.
+- **FR-011**: System MUST allow users to delete their own diary entries from the dashboard/list view.
 
 ### Assumptions
 
