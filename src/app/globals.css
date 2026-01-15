@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #fdfbf7;
+  --foreground: #2c3e50;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@layer utilities {
+  .bg-paper-pattern {
+    background-color: #fdfbf7;
+    background-image: 
+      linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, 0.5) 50%),
+      linear-gradient(rgba(240, 240, 240, 0.5) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  .bg-notebook-lines {
+    background-image: repeating-linear-gradient(transparent, transparent 31px, #e5e5e5 31px, #e5e5e5 32px);
+    background-attachment: local;
+  }
+}
