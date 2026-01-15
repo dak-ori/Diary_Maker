@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { ArrowLeft } from 'lucide-react'
 import { DeleteEntryButton } from '@/components/diary/delete-entry-button'
+import { ExportButton } from '@/components/diary/export-button'
 import { EditForm } from './edit-form'
 
 export default async function EntryPage({ params }: { params: { id: string } }) {
@@ -37,6 +38,12 @@ export default async function EntryPage({ params }: { params: { id: string } }) 
           <time className="text-sm text-brand-500 font-mono">
             {format(new Date(entry.created_at), 'yyyy년 M월 d일 HH:mm', { locale: ko })}
           </time>
+          <ExportButton 
+            content={entry.content}
+            date={entry.created_at}
+            mood={entry.mood_persona}
+            userName={user?.user_metadata?.full_name || '나'}
+          />
           <DeleteEntryButton id={entry.id} />
         </div>
       </div>
