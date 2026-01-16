@@ -11,8 +11,41 @@ export interface RefinementSession {
 }
 
 export interface CalendarEntryMap {
+
   [dateKey: string]: {
+
     id: string;
+
     brief_thought: string;
+
   }[];
+
+}
+
+
+
+export interface DiaryEntry {
+
+  id: string;
+
+  brief_thought: string;
+
+  content: string;
+
+  mood_persona: string;
+
+  created_at: string;
+
+}
+
+
+
+export interface DiaryPageProps {
+
+  entry: DiaryEntry | null;
+
+  pageNum: number;
+
+  isLeft: boolean;
+
 }

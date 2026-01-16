@@ -28,7 +28,10 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <EntryList initialEntries={entries || []} />
+      <EntryList 
+        initialEntries={entries || []} 
+        userName={user?.user_metadata?.full_name || '나'} 
+      />
     </div>
   )
 }

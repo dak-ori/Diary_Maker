@@ -7,23 +7,19 @@ import { filterEntries } from '@/lib/filter-utils'
 import { SearchX } from 'lucide-react'
 import { DashboardToggle, type ViewMode } from './dashboard-toggle'
 import { CalendarView } from './calendar-view'
-import { CalendarEntryMap } from '@/types/diary'
+import { BookModeOverlay } from './book-mode-overlay'
+import { CalendarEntryMap, DiaryEntry } from '@/types/diary'
 import { format } from 'date-fns'
-
-interface Entry {
-  id: string
-  brief_thought: string
-  content: string
-  mood_persona: string
-  created_at: string
-}
+import { BookText } from 'lucide-react'
 
 interface EntryListProps {
-  initialEntries: Entry[]
+  initialEntries: DiaryEntry[]
+  userName: string
 }
 
-export function EntryList({ initialEntries }: EntryListProps) {
+export function EntryList({ initialEntries, userName }: EntryListProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('list')
+  const [isBookOpen, setIsBookOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [activePersona, setActivePersona] = useState<string | null>(null)
 
@@ -60,10 +56,24 @@ export function EntryList({ initialEntries }: EntryListProps) {
           activePersona={activePersona}
           onPersonaChange={setActivePersona}
         />
-        <div className="flex justify-end">
+        <div className="flex items-center gap-3 justify-end">
+          <button
+            onClick={() => setIsBookOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-brand-800 text-brand-50 rounded-lg hover:bg-brand-900 transition-all shadow-md active:scale-95 font-hand text-lg"
+          >
+            <BookText className="w-5 h-5" />
+            책으로 읽기
+          </button>
           <DashboardToggle viewMode={viewMode} onViewModeChange={setViewMode} />
         </div>
       </div>
+
+      <BookModeOverlay 
+        isOpen={isBookOpen} 
+        onClose={() => setIsBookOpen(false)} 
+        entries={filteredEntries}
+        userName={userName}
+      />
 
       {viewMode === 'list' ? (
         filteredEntries.length > 0 ? (
