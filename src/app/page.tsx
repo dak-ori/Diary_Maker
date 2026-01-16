@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import LandingPage from '@/components/landing/LandingPage'
 
 export default async function Home() {
   const supabase = await createClient()
@@ -9,6 +10,5 @@ export default async function Home() {
     redirect('/dashboard')
   }
 
-  // 비로그인 사용자는 정적 랜딩 페이지로 리다이렉트
-  redirect('/landing.html')
+  return <LandingPage />
 }
