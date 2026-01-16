@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
+import { LogOut } from "lucide-react";
 
 export default async function DashboardLayout({
   children,
@@ -24,7 +25,12 @@ export default async function DashboardLayout({
         {/* Mobile Header (Hidden on Desktop) */}
         <div className="md:hidden h-14 bg-white border-b flex items-center px-4 justify-between shrink-0 z-20">
           <span className="font-bold text-lg text-slate-800">Diary Maker</span>
-          {/* Add a simple mobile menu or just rely on new entry button on dashboard */}
+          <form action="/auth/signout" method="post">
+            <button type="submit" className="p-2 text-slate-500 hover:text-red-600 transition-colors">
+              <LogOut className="w-5 h-5" />
+              <span className="sr-only">로그아웃</span>
+            </button>
+          </form>
         </div>
 
         {/* Main Content Area */}
