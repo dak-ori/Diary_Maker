@@ -65,7 +65,7 @@ export function Hero() {
         >
           <div className="h-48 bg-slate-200 rounded-sm mb-3 overflow-hidden relative">
             <Image 
-              src="https://images.unsplash.com/photo-1515890435782-59a5bb6e0c15?q=80&w=400&auto=format&fit=crop" 
+              src="https://images.unsplash.com/photo-1428592953211-077101b2021b?q=80&w=400&auto=format&fit=crop" 
               alt="Rainy day" 
               fill
               className="object-cover opacity-80 mix-blend-multiply"
