@@ -24,8 +24,8 @@ export function BriefThoughtInput({
 
   return (
     <div className="space-y-2">
-      <label htmlFor="brief-thought" className="block text-sm font-medium text-brand-700">
-        오늘의 짧은 생각
+      <label htmlFor="brief-thought" className="block text-sm font-medium text-gray-700">
+        오늘의 짧은 생각 ✨
       </label>
       <div className="relative">
         <textarea
@@ -34,9 +34,9 @@ export function BriefThoughtInput({
           onChange={handleChange}
           disabled={disabled}
           placeholder="오늘 있었던 일이나 감정을 짧게 적어보세요..."
-          className="w-full h-32 p-4 text-ink bg-white/50 backdrop-blur-sm border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none font-body placeholder:text-gray-400 disabled:opacity-50"
+          className="w-full h-32 p-4 pb-8 text-gray-800 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none placeholder:text-gray-400 disabled:opacity-50 font-sans text-sm"
         />
-        <div className="absolute bottom-2 right-2 text-xs text-brand-600 font-mono">
+        <div className="absolute bottom-2 right-3 text-xs text-gray-400 bg-gray-50 px-1 rounded">
           {value.length} / {maxLength}
         </div>
       </div>

@@ -13,7 +13,7 @@ const SYSTEM_INSTRUCTION = `
 `;
 
 export const model = genAI.getGenerativeModel({
-  model: "gemini-1.5-flash",
+  model: "gemini-2.0-flash",
   generationConfig: {
     maxOutputTokens: 2048,
     temperature: 0.7,

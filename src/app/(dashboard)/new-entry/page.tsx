@@ -20,7 +20,7 @@ export default function NewEntryPage() {
   const [isRefining, setIsRefining] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [step, setStep] = useState<'input' | 'review'>('input')
-  
+
   // Refinement history
   const [history, setHistory] = useState<ChatMessage[]>([])
 
@@ -35,21 +35,33 @@ export default function NewEntryPage() {
         body: JSON.stringify({ brief_thought: briefThought, persona }),
       })
 
-      if (!res.ok) throw new Error('Generation failed')
-
       const data = await res.json()
+
+      if (!res.ok) {
+        console.error('API Error:', data)
+        throw new Error(data.details || data.error || 'Generation failed')
+      }
+
       setGeneratedContent(data.content)
-      
+
       // Initialize history
       setHistory([
         { role: 'user', parts: [{ text: briefThought }] },
         { role: 'model', parts: [{ text: data.content }] }
       ])
-      
+
       setStep('review')
     } catch (error) {
       console.error('Error:', error)
-      alert('일기 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      const errorMsg = error instanceof Error ? error.message : ''
+
+      if (errorMsg.includes('429') || errorMsg.includes('quota') || errorMsg.includes('Too Many Requests')) {
+        alert('API 요청 한도를 초과했습니다. 잠시 후(30초~1분) 다시 시도해주세요.')
+      } else if (errorMsg.includes('Unauthorized')) {
+        alert('로그인이 필요합니다. 다시 로그인해주세요.')
+      } else {
+        alert('일기 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+      }
     } finally {
       setIsGenerating(false)
     }
@@ -63,10 +75,10 @@ export default function NewEntryPage() {
       const res = await fetch('/api/generate/refine', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          history, 
-          feedback, 
-          persona 
+        body: JSON.stringify({
+          history,
+          feedback,
+          persona
         }),
       })
 
@@ -74,9 +86,9 @@ export default function NewEntryPage() {
 
       const data = await res.json()
       const newContent = data.refinedContent
-      
+
       setGeneratedContent(newContent)
-      
+
       // Update history
       setHistory(prev => [
         ...prev,
@@ -118,121 +130,135 @@ export default function NewEntryPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto pb-12">
-      <div className="mb-6 flex items-center gap-2">
-        <Link 
+    <div className="h-full flex flex-col gap-6 max-w-4xl mx-auto">
+      {/* Page Header */}
+      <div className="flex items-center gap-4 animate-in slide-in-from-top-2 duration-300">
+        <Link
           href="/dashboard"
-          className="text-brand-700 hover:text-brand-900 transition-colors flex items-center gap-1"
+          className="p-2 -ml-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
-          돌아가기
+          <ArrowLeft className="w-6 h-6" />
         </Link>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-800">
+            {step === 'input' ? '오늘의 기록' : '일기 확인 및 수정'}
+          </h1>
+          <p className="text-slate-500 text-sm">
+            {step === 'input'
+              ? '하루의 조각들을 모아 일기를 만들어보세요'
+              : 'AI와 대화하며 내용을 다듬을 수 있습니다'
+            }
+          </p>
+        </div>
       </div>
 
-      <div className="space-y-8">
-        {step === 'input' && (
-          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-hand font-bold text-brand-900 mb-2">오늘의 기록</h1>
-              <p className="text-brand-700">하루의 조각들을 모아 일기를 만들어보세요.</p>
-            </div>
-
-            <div className="bg-white/40 backdrop-blur-sm p-6 rounded-xl border border-brand-100 shadow-sm space-y-6">
-              <BriefThoughtInput 
+      {/* Main Content Card - Fills remaining height, internal scroll */}
+      <div className="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-500">
+        <div className="flex-1 overflow-y-auto p-6 md:p-8 scroll-smooth">
+          {step === 'input' && (
+            <div className="space-y-8 max-w-2xl mx-auto py-4">
+              <BriefThoughtInput
                 value={briefThought}
                 onChange={setBriefThought}
                 disabled={isGenerating}
               />
-              
-              <PersonaSelector 
-                value={persona}
-                onChange={setPersona}
-                disabled={isGenerating}
-              />
-            </div>
 
-            <button
-              onClick={handleGenerate}
-              disabled={!briefThought.trim() || isGenerating}
-              className="w-full flex flex-col items-center justify-center gap-2 py-6 bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-medium text-lg min-h-[100px]"
-            >
-              {isGenerating ? (
-                <div className="scale-110">
-                  <LoadingPen />
-                </div>
-              ) : (
-                <>
-                  <Sparkles className="w-5 h-5" />
-                  AI 일기 생성하기
-                </>
-              )}
-            </button>
-          </div>
-        )}
-
-        {step === 'review' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center mb-4">
-              <h2 className="text-2xl font-hand font-bold text-brand-900">작성된 일기 확인</h2>
-              <p className="text-brand-600 text-sm">AI와 대화하며 내용을 더 다듬어보세요.</p>
-            </div>
-
-            <div className="space-y-4">
-              <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-brand-100 mb-2">
-                <PersonaSelector 
+              <div className="pt-4 border-t border-slate-100">
+                <span className="block text-sm font-medium text-slate-700 mb-4">문체 선택</span>
+                <PersonaSelector
                   value={persona}
                   onChange={setPersona}
-                  disabled={isRefining}
+                  disabled={isGenerating}
                 />
               </div>
 
-              <div className="relative">
-                {isRefining && (
-                  <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
-                    <LoadingPen />
-                  </div>
-                )}
-                <EntryDisplay 
-                  content={generatedContent}
-                  onContentChange={setGeneratedContent}
-                />
-              </div>
-
-              <RefinementInput 
-                onRefine={handleRefine}
-                isLoading={isRefining}
-              />
-            </div>
-
-            <div className="flex gap-4 pt-6">
               <button
-                onClick={() => {
-                  if (confirm('모든 수정 내용이 사라집니다. 다시 작성하시겠습니까?')) {
-                    setStep('input')
-                    setHistory([])
-                  }
-                }}
-                disabled={isSaving || isRefining}
-                className="flex-1 py-3 px-4 border border-brand-300 text-brand-700 rounded-lg hover:bg-brand-50 transition-colors font-medium flex items-center justify-center gap-2"
+                onClick={handleGenerate}
+                disabled={!briefThought.trim() || isGenerating}
+                className="w-full flex items-center justify-center gap-3 py-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-indigo-200 font-medium text-lg mt-8"
               >
-                <RefreshCcw className="w-4 h-4" />
-                처음부터 다시
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={isSaving || isRefining || !generatedContent.trim()}
-                className="flex-[2] flex items-center justify-center gap-2 py-3 px-4 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors shadow-sm font-medium"
-              >
-                {isSaving ? '저장 중...' : (
+                {isGenerating ? (
+                  <LoadingPen />
+                ) : (
                   <>
-                    <Save className="w-4 h-4" />
-                    일기장 저장하기
+                    <Sparkles className="w-5 h-5" />
+                    AI 일기 생성하기
                   </>
                 )}
               </button>
             </div>
-          </div>
-        )}
+          )}
+
+          {step === 'review' && (
+            <div className="flex flex-col lg:flex-row gap-8 h-full">
+              {/* Left Column: Preview */}
+              <div className="flex-1 space-y-6">
+                <div className="relative group">
+                  {isRefining && (
+                    <div className="absolute inset-0 bg-white/60 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-lg">
+                      <LoadingPen />
+                    </div>
+                  )}
+                  <div className="bg-slate-50 p-6 rounded-xl border border-slate-200 min-h-[400px]">
+                    <EntryDisplay
+                      content={generatedContent}
+                      onContentChange={setGeneratedContent}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Controls */}
+              <div className="w-full lg:w-80 flex flex-col gap-6 shrink-0 pb-10">
+                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                  <h3 className="text-sm font-medium text-slate-700 mb-3">문체 변경</h3>
+                  <PersonaSelector
+                    value={persona}
+                    onChange={setPersona}
+                    disabled={isRefining}
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-slate-700">AI에게 수정 요청</h3>
+                  <RefinementInput
+                    onRefine={handleRefine}
+                    isLoading={isRefining}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-slate-100">
+                  <button
+                    onClick={handleSave}
+                    disabled={isSaving || isRefining || !generatedContent.trim()}
+                    className="flex items-center justify-center gap-2 py-3 px-4 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-colors shadow-md font-medium"
+                  >
+                    {isSaving ? '저장 중...' : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        일기장 저장하기
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      if (confirm('모든 수정 내용이 사라집니다. 다시 작성하시겠습니까?')) {
+                        setStep('input')
+                        setHistory([])
+                      }
+                    }}
+                    disabled={isSaving || isRefining}
+                    className="flex items-center justify-center gap-2 py-3 px-4 bg-white border border-slate-200 text-slate-600 rounded-xl hover:bg-slate-50 transition-colors font-medium"
+                  >
+                    <RefreshCcw className="w-4 h-4" />
+                    처음부터 다시
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -13,10 +13,10 @@ interface DashboardFilterProps {
 }
 
 const personas: { label: string; value: Persona; icon: LucideIcon }[] = [
-  { label: '전체', value: 'Neutral', icon: Coffee }, // Special case for 'All' or just Neutral? Let's follow spec.
   { label: '감사', value: 'Gratitude', icon: Sparkles },
   { label: '성찰', value: 'Reflective', icon: BookOpen },
   { label: '긍정', value: 'Optimistic', icon: Sun },
+  { label: '담담', value: 'Neutral', icon: Coffee },
 ]
 
 export function DashboardFilter({
@@ -26,25 +26,25 @@ export function DashboardFilter({
   onPersonaChange,
 }: DashboardFilterProps) {
   return (
-    <div className="space-y-6 mb-8">
+    <div className="space-y-4">
       {/* Search Bar */}
       <div className="relative group">
-        <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-          <Search className="w-5 h-5 text-brand-400 group-focus-within:text-brand-600 transition-colors" />
+        <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+          <Search className="w-4 h-4 text-gray-400 group-focus-within:text-gray-600 transition-colors" />
         </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="기억하고 싶은 키워드를 검색해보세요..."
-          className="w-full pl-12 pr-12 py-4 bg-white/50 backdrop-blur-sm border-2 border-brand-100 rounded-2xl focus:border-brand-300 focus:ring-0 outline-none transition-all font-hand text-lg placeholder:text-brand-300"
+          placeholder="키워드 검색..."
+          className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:border-gray-400 focus:ring-0 focus:bg-white outline-none transition-all text-sm placeholder:text-gray-400"
         />
         {searchQuery && (
           <button
             onClick={() => onSearchChange('')}
-            className="absolute inset-y-0 right-4 flex items-center text-brand-400 hover:text-brand-600 transition-colors"
+            className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -54,10 +54,10 @@ export function DashboardFilter({
         <button
           onClick={() => onPersonaChange(null)}
           className={cn(
-            "px-4 py-2 rounded-full border-2 text-sm font-medium transition-all",
+            "px-3 py-1.5 rounded-full text-xs font-medium transition-all",
             !activePersona 
-              ? "bg-brand-500 border-brand-500 text-white shadow-md" 
-              : "bg-white/40 border-brand-100 text-brand-600 hover:border-brand-200"
+              ? "bg-slate-800 text-white shadow-md" 
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           )}
         >
           전체
@@ -67,13 +67,13 @@ export function DashboardFilter({
             key={p.value}
             onClick={() => onPersonaChange(p.value)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full border-2 text-sm font-medium transition-all",
+              "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all",
               activePersona === p.value
-                ? "bg-brand-500 border-brand-500 text-white shadow-md"
-                : "bg-white/40 border-brand-100 text-brand-600 hover:border-brand-200"
+                ? "bg-slate-800 text-white shadow-md"
+                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             )}
           >
-            <p.icon className="w-4 h-4" />
+            <p.icon className="w-3 h-3" />
             {p.label}
           </button>
         ))}

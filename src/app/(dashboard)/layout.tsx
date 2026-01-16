@@ -1,7 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import Link from "next/link";
-import { LogOut, PenLine } from "lucide-react";
+import { Sidebar } from "@/components/layout/sidebar";
 
 export default async function DashboardLayout({
   children,
@@ -15,41 +14,25 @@ export default async function DashboardLayout({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/");
   }
 
   return (
-    <div className="min-h-screen bg-paper-pattern font-body text-ink">
-      <header className="sticky top-0 z-10 border-b border-brand-200 bg-[#FDFBF7]/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/dashboard" className="text-2xl font-hand font-bold text-brand-800">
-            Diary Maker
-          </Link>
-          
-          <nav className="flex items-center gap-4">
-            <Link 
-              href="/new-entry"
-              className="flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-full hover:bg-brand-600 transition-colors text-sm font-medium shadow-sm"
-            >
-              <PenLine className="w-4 h-4" />
-              <span className="hidden sm:inline">새 일기</span>
-            </Link>
-            
-            <form action="/auth/signout" method="post">
-               <button 
-                 type="submit"
-                 className="p-2 text-brand-700 hover:bg-brand-50 rounded-full transition-colors"
-                 title="로그아웃"
-               >
-                 <LogOut className="w-5 h-5" />
-               </button>
-            </form>
-          </nav>
+    <div className="flex h-screen overflow-hidden bg-slate-50">
+      <Sidebar />
+      <main className="flex-1 flex flex-col h-full relative overflow-hidden">
+        {/* Mobile Header (Hidden on Desktop) */}
+        <div className="md:hidden h-14 bg-white border-b flex items-center px-4 justify-between shrink-0 z-20">
+          <span className="font-bold text-lg text-slate-800">Diary Maker</span>
+          {/* Add a simple mobile menu or just rely on new entry button on dashboard */}
         </div>
-      </header>
 
-      <main className="container mx-auto px-4 py-8">
-        {children}
+        {/* Main Content Area */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-6 lg:p-8 w-full scroll-smooth">
+          <div className="max-w-6xl mx-auto h-full flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {children}
+          </div>
+        </div>
       </main>
     </div>
   );
