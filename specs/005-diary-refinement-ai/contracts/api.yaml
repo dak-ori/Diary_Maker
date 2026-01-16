@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Diary Maker Refinement API
+  version: 1.0.0
+paths:
+  /api/generate/refine:
+    post:
+      summary: Refine an existing diary entry based on user feedback.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                history:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      role: { type: string, enum: [user, model] }
+                      parts: 
+                        type: array
+                        items: { type: object, properties: { text: { type: string } } }
+                feedback:
+                  type: string
+                persona:
+                  type: string
+      responses:
+        '200':
+          description: Successfully refined content.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  refinedContent: { type: string }

@@ -6,8 +6,10 @@ import { BriefThoughtInput } from '@/components/diary/brief-thought-input'
 import { PersonaSelector, type Persona } from '@/components/diary/persona-selector'
 import { EntryDisplay } from '@/components/diary/entry-display'
 import { LoadingPen } from '@/components/ui/loading-pen'
-import { Sparkles, Save, ArrowLeft } from 'lucide-react'
+import { RefinementInput } from '@/components/diary/refinement-input'
+import { Sparkles, Save, ArrowLeft, RefreshCcw } from 'lucide-react'
 import Link from 'next/link'
+import { ChatMessage } from '@/types/diary'
 
 export default function NewEntryPage() {
   const router = useRouter()
@@ -15,8 +17,12 @@ export default function NewEntryPage() {
   const [persona, setPersona] = useState<Persona>('Neutral')
   const [generatedContent, setGeneratedContent] = useState('')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isRefining, setIsRefining] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [step, setStep] = useState<'input' | 'review'>('input')
+  
+  // Refinement history
+  const [history, setHistory] = useState<ChatMessage[]>([])
 
   const handleGenerate = async () => {
     if (!briefThought.trim()) return
@@ -33,12 +39,55 @@ export default function NewEntryPage() {
 
       const data = await res.json()
       setGeneratedContent(data.content)
+      
+      // Initialize history
+      setHistory([
+        { role: 'user', parts: [{ text: briefThought }] },
+        { role: 'model', parts: [{ text: data.content }] }
+      ])
+      
       setStep('review')
     } catch (error) {
       console.error('Error:', error)
       alert('일기 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const handleRefine = async (feedback: string) => {
+    if (!feedback.trim() || isRefining) return
+
+    setIsRefining(true)
+    try {
+      const res = await fetch('/api/generate/refine', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          history, 
+          feedback, 
+          persona 
+        }),
+      })
+
+      if (!res.ok) throw new Error('Refinement failed')
+
+      const data = await res.json()
+      const newContent = data.refinedContent
+      
+      setGeneratedContent(newContent)
+      
+      // Update history
+      setHistory(prev => [
+        ...prev,
+        { role: 'user', parts: [{ text: feedback }] },
+        { role: 'model', parts: [{ text: newContent }] }
+      ])
+    } catch (error) {
+      console.error('Error refining:', error)
+      alert('수정 중 오류가 발생했습니다.')
+    } finally {
+      setIsRefining(false)
     }
   }
 
@@ -125,25 +174,53 @@ export default function NewEntryPage() {
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="text-center mb-4">
               <h2 className="text-2xl font-hand font-bold text-brand-900">작성된 일기 확인</h2>
-              <p className="text-brand-600 text-sm">내용을 자유롭게 수정할 수 있어요.</p>
+              <p className="text-brand-600 text-sm">AI와 대화하며 내용을 더 다듬어보세요.</p>
             </div>
 
-            <EntryDisplay 
-              content={generatedContent}
-              onContentChange={setGeneratedContent}
-            />
+            <div className="space-y-4">
+              <div className="bg-white/40 backdrop-blur-sm p-4 rounded-xl border border-brand-100 mb-2">
+                <PersonaSelector 
+                  value={persona}
+                  onChange={setPersona}
+                  disabled={isRefining}
+                />
+              </div>
 
-            <div className="flex gap-4 pt-4">
+              <div className="relative">
+                {isRefining && (
+                  <div className="absolute inset-0 bg-white/40 backdrop-blur-[1px] z-10 flex items-center justify-center rounded-2xl">
+                    <LoadingPen />
+                  </div>
+                )}
+                <EntryDisplay 
+                  content={generatedContent}
+                  onContentChange={setGeneratedContent}
+                />
+              </div>
+
+              <RefinementInput 
+                onRefine={handleRefine}
+                isLoading={isRefining}
+              />
+            </div>
+
+            <div className="flex gap-4 pt-6">
               <button
-                onClick={() => setStep('input')}
-                disabled={isSaving}
-                className="flex-1 py-3 px-4 border border-brand-300 text-brand-700 rounded-lg hover:bg-brand-50 transition-colors font-medium"
+                onClick={() => {
+                  if (confirm('모든 수정 내용이 사라집니다. 다시 작성하시겠습니까?')) {
+                    setStep('input')
+                    setHistory([])
+                  }
+                }}
+                disabled={isSaving || isRefining}
+                className="flex-1 py-3 px-4 border border-brand-300 text-brand-700 rounded-lg hover:bg-brand-50 transition-colors font-medium flex items-center justify-center gap-2"
               >
-                다시 쓰기
+                <RefreshCcw className="w-4 h-4" />
+                처음부터 다시
               </button>
               <button
                 onClick={handleSave}
-                disabled={isSaving || !generatedContent.trim()}
+                disabled={isSaving || isRefining || !generatedContent.trim()}
                 className="flex-[2] flex items-center justify-center gap-2 py-3 px-4 bg-brand-600 text-white rounded-lg hover:bg-brand-700 transition-colors shadow-sm font-medium"
               >
                 {isSaving ? '저장 중...' : (

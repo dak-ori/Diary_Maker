@@ -29,7 +29,6 @@ TypeScript 5.x (Strict): Follow standard conventions
 ## Recent Changes
 - 004-landing-page: Added TypeScript 5.x, Next.js 14+ (App Router) + `lucide-react`, `framer-motion` (for organic animations), Tailwind CSS
 - 003-dashboard-search-filter: Added TypeScript 5.x, Next.js 14+ (App Router) + `lucide-react`, `clsx`, `tailwind-merge`
-- 003-dashboard-search-filter: Added [if applicable, e.g., PostgreSQL, CoreData, files or N/A]
 
 
 <!-- MANUAL ADDITIONS START -->

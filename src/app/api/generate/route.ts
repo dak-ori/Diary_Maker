@@ -18,12 +18,8 @@ export async function POST(req: Request) {
     }
 
     const prompt = `
-      Role: Professional Writer / Ghostwriter
-      Task: Expand the following brief thought into a rich, expressive diary entry.
       Persona/Tone: ${persona || 'Neutral'}
-      Language: Korean (Keep the user's original nuances but improve flow and expression)
-      Format: Return ONLY the diary entry text. No intro/outro.
-      Context: This is a personal diary entry. It should feel authentic, warm, and handwritten-ready.
+      Task: Expand the following brief thought into a rich, expressive diary entry.
 
       Brief Thought:
       "${brief_thought}"
