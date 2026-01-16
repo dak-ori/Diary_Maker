@@ -20,9 +20,6 @@ body {
   color: var(--foreground);
   background-color: var(--background);
   font-family: var(--font-sans), system-ui, sans-serif;
-  overflow: hidden;
-  /* Prevent body scroll */
-  height: 100vh;
 }
 
 /* Scrollbar styling for content areas */
@@ -45,6 +42,10 @@ body {
 }
 
 @layer utilities {
+  .handwritten {
+    font-family: var(--font-nanum-pen), cursive;
+  }
+
 
   /* Mobile responsiveness utilities */
   .text-responsive {

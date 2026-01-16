@@ -17,7 +17,7 @@ export default function LandingPage() {
 
         {/* Header / Nav */}
         <nav className="flex justify-between items-center mb-12 relative z-20 pl-8">
-          <div className="text-3xl font-bold tracking-tighter transform -rotate-2">
+          <div className="text-3xl font-bold tracking-tighter transform -rotate-2 handwritten">
             Diary Maker ✏️
           </div>
           <Link
@@ -35,15 +35,16 @@ export default function LandingPage() {
               <div className="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-lg text-lg transform -rotate-1 shadow-sm border border-yellow-200">
                 ✨ 오늘도 수고한 당신에게
               </div>
-              <h1 className="text-5xl md:text-6xl leading-tight font-pen">
+              <h1 className="text-5xl md:text-6xl leading-tight handwritten marker-highlight">
                 오늘의 짧은 생각,<br />
-                <span className="marker-highlight">따뜻한 일기</span>가 되다.
+                따뜻한 일기가 되다.
               </h1>
               <p className="text-xl text-slate-600 leading-relaxed pt-4">
                 &quot;야근, 비 옴, 편의점...&quot;<br />
                 단어 몇 개만 던져주세요. <br />
                 AI가 당신의 기분에 맞춰 일기 한 페이지를 써드릴게요.
               </p>
+
               <div className="pt-8 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/login"
@@ -69,7 +70,7 @@ export default function LandingPage() {
                     className="w-full h-full object-cover opacity-80 mix-blend-multiply"
                   />
                 </div>
-                <p className="text-xl text-center text-gray-700 font-pen">비 오는 날의 라면 🍜</p>
+                <p className="text-xl text-center text-gray-700 handwritten">비 오는 날의 라면 🍜</p>
                 {/* Tape element */}
                 <div className="tape absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/30 rotate-3"></div>
               </div>
@@ -79,7 +80,7 @@ export default function LandingPage() {
                 <div className="text-sm p-4 h-48 bg-gray-50 text-gray-600 overflow-hidden leading-relaxed font-sans border border-gray-100">
                   &quot;오늘은 정말 정신없는 하루였다. 갑자기 쏟아진 비에 우산도 없이 편의점으로 뛰어가 컵라면을 샀다. 후두둑 떨어지는 빗소리를 들으며 먹는 따뜻한 국물... 왠지 모르게 위로받는 기분이었다.&quot;
                 </div>
-                <p className="text-xl text-center text-gray-700 mt-2 font-pen">2026.01.16</p>
+                <p className="text-xl text-center text-gray-700 mt-2 handwritten">2026.01.16</p>
                 <div className="tape absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-8 bg-white/30 -rotate-2"></div>
               </div>
             </div>
@@ -99,7 +100,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="w-full md:w-1/2 pl-4">
-                <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">찰떡같이 알아듣는 AI</h3>
+                <h3 className="text-3xl font-bold text-slate-800 mb-3 handwritten">찰떡같이 알아듣는 AI</h3>
                 <p className="text-lg text-slate-600">
                   단어 몇 개만 툭 던져도, 문맥을 파악해서 <br />
                   가장 자연스러운 문장으로 이어줍니다.
@@ -119,7 +120,7 @@ export default function LandingPage() {
                 </div>
               </div>
               <div className="w-full md:w-1/2 text-right pr-4">
-                <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">오늘의 기분에 맞춰서</h3>
+                <h3 className="text-3xl font-bold text-slate-800 mb-3 handwritten">오늘의 기분에 맞춰서</h3>
                 <p className="text-lg text-slate-600">
                   같은 일도 기분에 따라 다르게 기록되죠.<br />
                   원하는 페르소나를 선택해보세요.
@@ -133,11 +134,11 @@ export default function LandingPage() {
                 <div className="bg-white h-48 flex items-center justify-center text-gray-400">
                   <span className="text-4xl text-gray-300">Image</span>
                 </div>
-                <p className="text-white mt-4 font-pen text-xl">나만의 일기장 ✨</p>
+                <p className="text-white mt-4 handwritten text-xl">나만의 일기장 ✨</p>
                 <div className="absolute top-0 inset-x-0 h-full bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
               </div>
               <div className="w-full md:w-1/2 pl-4">
-                <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">간직하고 싶은 순간</h3>
+                <h3 className="text-3xl font-bold text-slate-800 mb-3 handwritten">간직하고 싶은 순간</h3>
                 <p className="text-lg text-slate-600">
                   작성한 일기는 폴라로이드 감성의 이미지로 <br />
                   저장해서 공유할 수 있어요.
