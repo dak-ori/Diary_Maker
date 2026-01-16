@@ -1,86 +1,82 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Sparkles, Users, Image as ImageIcon, CheckCircle2 } from 'lucide-react'
-
-const features = [
-  {
-    title: 'AI 일기 생성',
-    description: '단어 몇 개, 짧은 문장 하나만으로도 감성이 듬뿍 담긴 일기를 작성해 드립니다.',
-    icon: Sparkles,
-    color: 'bg-amber-50',
-    iconColor: 'text-amber-500',
-  },
-  {
-    title: '감성 페르소나',
-    description: '성찰, 감사, 긍정 등 당신의 기분에 맞는 톤으로 일기를 완성해보세요.',
-    icon: Users,
-    color: 'bg-blue-50',
-    iconColor: 'text-blue-500',
-  },
-  {
-    title: '이미지 내보내기',
-    description: '완성된 일기를 폴라로이드나 노트 스타일 이미지로 저장하고 공유해보세요.',
-    icon: ImageIcon,
-    color: 'bg-rose-50',
-    iconColor: 'text-rose-500',
-  }
-]
 
 export function Features() {
   return (
-    <section id="features" className="py-24 bg-white/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-hand font-bold text-brand-900 mb-4"
-          >
-            기록이 즐거워지는 기능들
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-brand-700 text-lg max-w-xl mx-auto font-body"
-          >
-            Diary Maker는 당신의 사소한 생각도 소중한 기록으로 만들어 드립니다.
-          </motion.p>
+    <section className="mt-32 space-y-24">
+      {/* Feature 1 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="flex flex-col md:flex-row gap-8 items-center"
+      >
+        <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg border border-gray-200 transform -rotate-1 relative">
+          <div className="absolute -top-4 -left-4 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-2xl shadow-md z-10">✍️</div>
+          <h3 className="text-2xl font-bold mb-4 font-sans text-slate-800">키워드만 입력하세요</h3>
+          <div className="bg-gray-100 p-4 rounded text-gray-600 font-mono text-sm leading-loose">
+            &gt; 야근<br />
+            &gt; 버스 놓침<br />
+            &gt; 밤하늘 별
+          </div>
         </div>
+        <div className="w-full md:w-1/2 pl-4">
+          <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">찰떡같이 알아듣는 AI</h3>
+          <p className="text-lg text-slate-600 font-hand">
+            단어 몇 개만 툭 던져도, 문맥을 파악해서 <br />
+            가장 자연스러운 문장으로 이어줍니다.
+          </p>
+        </div>
+      </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group p-8 bg-white rounded-3xl shadow-sm border border-brand-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-            >
-              <div className={`w-14 h-14 ${feature.color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                <feature.icon className={`w-8 h-8 ${feature.iconColor}`} />
-              </div>
-              <h3 className="text-2xl font-hand font-bold text-brand-900 mb-4">{feature.title}</h3>
-              <p className="text-brand-600 leading-relaxed font-body break-keep">
-                {feature.description}
-              </p>
-              
-              <ul className="mt-6 space-y-2">
-                 {[1, 2].map((i) => (
-                   <li key={i} className="flex items-center gap-2 text-sm text-brand-400">
-                     <CheckCircle2 className="w-4 h-4 text-brand-300" />
-                     <span>쉽고 빠른 기록 경험</span>
-                   </li>
-                 ))}
-              </ul>
-            </motion.div>
-          ))}
+      {/* Feature 2 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="flex flex-col md:flex-row-reverse gap-8 items-center"
+      >
+        <div className="w-full md:w-1/2 bg-white p-6 rounded-lg shadow-lg border border-gray-200 transform rotate-1 relative">
+          <div className="absolute -top-4 -right-4 w-12 h-12 bg-indigo-400 rounded-full flex items-center justify-center text-2xl shadow-md z-10">🎭</div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-pink-50 border border-pink-200 p-3 rounded text-center text-pink-700 text-sm font-hand">새벽 감성 🌙</div>
+            <div className="bg-blue-50 border border-blue-200 p-3 rounded text-center text-blue-700 text-sm font-hand">담백하게 📝</div>
+            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded text-center text-yellow-700 text-sm font-hand">귀엽게 🐥</div>
+            <div className="bg-purple-50 border border-purple-200 p-3 rounded text-center text-purple-700 text-sm font-hand">소설가처럼 🖋️</div>
+          </div>
         </div>
-      </div>
+        <div className="w-full md:w-1/2 text-right pr-4">
+          <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">오늘의 기분에 맞춰서</h3>
+          <p className="text-lg text-slate-600 font-hand">
+            같은 일도 기분에 따라 다르게 기록되죠.<br />
+            원하는 페르소나를 선택해보세요.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Feature 3 */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="flex flex-col md:flex-row gap-8 items-center pb-20"
+      >
+        <div className="w-full md:w-1/2 text-center bg-gray-800 p-2 pb-8 shadow-2xl relative rotate-1">
+          <div className="bg-white h-48 flex items-center justify-center text-gray-400">
+            <span className="text-4xl text-gray-300 font-hand">Image Preview</span>
+          </div>
+          <p className="text-white mt-4 text-xl font-pen">나만의 일기장 ✨</p>
+          <div className="absolute top-0 inset-x-0 h-full bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+        </div>
+        <div className="w-full md:w-1/2 pl-4">
+          <h3 className="text-3xl font-bold text-slate-800 mb-3 font-pen">간직하고 싶은 순간</h3>
+          <p className="text-lg text-slate-600 font-hand">
+            작성한 일기는 폴라로이드 감성의 이미지로 <br />
+            저장해서 공유할 수 있어요.
+          </p>
+        </div>
+      </motion.div>
     </section>
   )
 }

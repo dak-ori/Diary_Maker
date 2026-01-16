@@ -28,7 +28,9 @@ const config: Config = {
         }
       },
       fontFamily: {
-        hand: ["var(--font-nanum-pen)", "cursive"],
+        hand: ["var(--font-patrick-hand)", "cursive"],
+        pen: ["var(--font-nanum-pen)", "cursive"],
+        gamja: ["var(--font-gamja-flower)", "cursive"],
         body: ["var(--font-gowun-dodum)", "sans-serif"],
         sans: ["var(--font-gowun-dodum)", "sans-serif"], 
       },
