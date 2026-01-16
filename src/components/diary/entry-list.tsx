@@ -4,13 +4,14 @@ import { useState, useMemo } from 'react'
 import { EntryCard } from './entry-card'
 import { DashboardFilter } from './dashboard-filter'
 import { filterEntries } from '@/lib/filter-utils'
-import { SearchX } from 'lucide-react'
+import { SearchX, BookText } from 'lucide-react'
 import { DashboardToggle, type ViewMode } from './dashboard-toggle'
 import { CalendarView } from './calendar-view'
 import { BookModeOverlay } from './book-mode-overlay'
+import { StatsWidget } from './stats-widget'
 import { CalendarEntryMap, DiaryEntry } from '@/types/diary'
 import { format } from 'date-fns'
-import { BookText } from 'lucide-react'
+import { getStatsSnapshot } from '@/lib/stats-utils'
 
 interface EntryListProps {
   initialEntries: DiaryEntry[]
@@ -26,6 +27,11 @@ export function EntryList({ initialEntries, userName }: EntryListProps) {
   const filteredEntries = useMemo(() => {
     return filterEntries(initialEntries, searchQuery, activePersona)
   }, [initialEntries, searchQuery, activePersona])
+
+  // Calculate statistics from initialEntries (all user entries)
+  const stats = useMemo(() => {
+    return getStatsSnapshot(initialEntries)
+  }, [initialEntries])
 
   const entryMap = useMemo(() => {
     const map: CalendarEntryMap = {}
@@ -49,6 +55,9 @@ export function EntryList({ initialEntries, userName }: EntryListProps) {
 
   return (
     <div className="space-y-8">
+      {/* Statistics Widget at the top */}
+      <StatsWidget stats={stats} />
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <DashboardFilter 
           searchQuery={searchQuery}
