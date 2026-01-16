@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import { Sparkles, BookOpen, Sun, Coffee, ArrowRight } from 'lucide-react'
+import { Sparkles, BookOpen, Sun, Coffee, ArrowRight, LucideIcon } from 'lucide-react'
 
 interface EntryCardProps {
   id: string
@@ -10,7 +10,7 @@ interface EntryCardProps {
   created_at: string
 }
 
-const personaIcons: Record<string, any> = {
+const personaIcons: Record<string, LucideIcon> = {
   'Neutral': Coffee,
   'Gratitude': Sparkles,
   'Reflective': BookOpen,

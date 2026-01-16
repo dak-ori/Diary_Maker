@@ -9,14 +9,18 @@ import { ExportButton } from '@/components/diary/export-button'
 import { EditForm } from './edit-form'
 
 export default async function EntryPage({ params }: { params: { id: string } }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return null
+  }
 
   const { data: entry } = await supabase
     .from('entries')
     .select('*')
     .eq('id', params.id)
-    .eq('user_id', user?.id)
+    .eq('user_id', user.id)
     .single()
 
   if (!entry) {
@@ -51,7 +55,7 @@ export default async function EntryPage({ params }: { params: { id: string } }) 
       <div className="mb-8">
         <h2 className="text-sm font-medium text-brand-500 mb-2">오늘의 짧은 생각</h2>
         <div className="bg-white/40 p-4 rounded-lg border border-brand-100 text-brand-800 italic">
-          "{entry.brief_thought}"
+          &quot;{entry.brief_thought}&quot;
         </div>
       </div>
 

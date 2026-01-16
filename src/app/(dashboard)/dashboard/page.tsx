@@ -1,14 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
-import { EntryCard } from '@/components/diary/entry-card'
+import { EntryList } from '@/components/diary/entry-list'
 
 export default async function DashboardPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return null
+  }
 
   const { data: entries } = await supabase
     .from('entries')
     .select('*')
-    .eq('user_id', user?.id)
+    .eq('user_id', user.id)
     .order('created_at', { ascending: false })
 
   return (
@@ -24,23 +28,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {entries && entries.length > 0 ? (
-          entries.map((entry) => (
-            <EntryCard
-              key={entry.id}
-              id={entry.id}
-              brief_thought={entry.brief_thought}
-              mood_persona={entry.mood_persona}
-              created_at={entry.created_at}
-            />
-          ))
-        ) : (
-          <div className="col-span-full text-center py-12 border-2 border-dashed border-brand-200 rounded-lg bg-white/30">
-            <p className="text-brand-500 mb-4">아직 작성된 일기가 없습니다.</p>
-          </div>
-        )}
-      </div>
+      <EntryList initialEntries={entries || []} />
     </div>
   )
 }

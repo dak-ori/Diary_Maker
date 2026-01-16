@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { X, Download, Share2, Image as ImageIcon, FileText } from 'lucide-react'
 import { PolaroidTemplate } from '@/components/diary/export-templates/polaroid-template'
@@ -22,9 +22,14 @@ type ExportStyle = 'polaroid' | 'note'
 export function ExportModal({ isOpen, onClose, content, date, mood, userName }: ExportModalProps) {
   const [style, setStyle] = useState<ExportStyle>('polaroid')
   const [isGenerating, setIsGenerating] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const templateRef = useRef<HTMLDivElement>(null)
 
-  if (!isOpen) return null
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!isOpen || !mounted) return null
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose()
@@ -156,6 +161,7 @@ export function ExportModal({ isOpen, onClose, content, date, mood, userName }: 
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { BriefThoughtInput } from '@/components/diary/brief-thought-input'
 import { PersonaSelector, type Persona } from '@/components/diary/persona-selector'
 import { EntryDisplay } from '@/components/diary/entry-display'
+import { LoadingPen } from '@/components/ui/loading-pen'
 import { Sparkles, Save, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -104,13 +105,12 @@ export default function NewEntryPage() {
             <button
               onClick={handleGenerate}
               disabled={!briefThought.trim() || isGenerating}
-              className="w-full flex items-center justify-center gap-2 py-4 bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-medium text-lg"
+              className="w-full flex flex-col items-center justify-center gap-2 py-6 bg-brand-500 text-white rounded-xl hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-medium text-lg min-h-[100px]"
             >
               {isGenerating ? (
-                <>
-                  <Sparkles className="w-5 h-5 animate-spin" />
-                  일기 쓰는 중...
-                </>
+                <div className="scale-110">
+                  <LoadingPen />
+                </div>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5" />

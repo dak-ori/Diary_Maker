@@ -1,8 +1,5 @@
 'use client'
 
-import { cn } from '@/lib/utils'
-import { ChangeEvent } from 'react'
-
 interface EntryDisplayProps {
   content: string
   onContentChange: (newContent: string) => void
