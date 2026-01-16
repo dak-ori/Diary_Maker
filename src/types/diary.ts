@@ -9,3 +9,10 @@ export interface RefinementSession {
   history: ChatMessage[];
   versions: string[];
 }
+
+export interface CalendarEntryMap {
+  [dateKey: string]: {
+    id: string;
+    brief_thought: string;
+  }[];
+}
